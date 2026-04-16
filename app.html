@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sipd — My Account</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.pf-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem}
+.pf-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.75rem;width:100%;max-width:380px}
+.pf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.pf-logo{font-size:18px;font-weight:600;color:var(--text)}
+.pf-logo span{color:var(--accent)}
+.pf-close{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;line-height:1}
+.pf-merchant{text-align:center;font-size:22px;font-weight:600;letter-spacing:-0.5px;margin-bottom:6px}
+.pf-amount{text-align:center;font-size:36px;font-weight:600;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
+.pf-desc{text-align:center;font-size:13px;color:var(--text2);margin-bottom:4px}
+.pf-ref{text-align:center;font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:1rem}
+.pf-methods{display:flex;gap:6px;margin-bottom:4px}
+.pf-method{flex:1;padding:8px 4px;border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:12px;text-align:center;cursor:pointer;color:var(--text2);transition:all .15s}
+.pf-method.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+</style>
+</head>
+<body>
+
+<div id="payment-modal" style="display:none;position:fixed;inset:0;z-index:999"></div>
+
+<div class="page-wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="index.html" class="logo">sipd<span>.</span></a>
+    </div>
+    <div id="topbar-user" class="topbar-right"></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="container" style="padding-top:1rem;padding-bottom:3rem;flex:1">
+
+    <!-- Welcome banner (shown once after registration) -->
+    <div id="welcome-banner" class="banner banner-success" style="display:none">
+      Welcome to Sipd! Your R 5 joining fee has been processed and your queue position is now active.
+    </div>
+
+    <!-- App banner (for notifications) -->
+    <div id="app-banner" class="banner"></div>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="queue">Queue</button>
+      <button class="nav-tab" data-tab="send">Send a Cup</button>
+      <button class="nav-tab" data-tab="dashboard">My Dashboard</button>
+      <button class="nav-tab" data-tab="howit">How it works</button>
+    </div>
+
+    <!-- ── QUEUE TAB ── -->
+    <div id="tab-queue" class="tab-section">
+      <div class="sec-header" style="margin-bottom:12px">
+        <div class="sec-label">Community queue</div>
+        <div class="fifo-tag">System assigns · FIFO order</div>
+      </div>
+      <div class="card" style="padding:0 1.25rem">
+        <div id="queue-list"><div class="empty-state">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ── SEND TAB ── -->
+    <div id="tab-send" class="tab-section" style="display:none">
+
+      <div class="card">
+        <div class="card-title">Daily send slots</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:8px">
+          Send 1, 2, or all 3 cups — entirely your choice. Each cup you send puts you in line for 2 potential gifters back.
+        </div>
+        <div class="limit-dots" id="send-dots"></div>
+        <div style="font-size:12px;color:var(--text3)" id="send-status"></div>
+      </div>
+
+      <div class="card" id="assign-card">
+        <h3>System-assigned recipient</h3>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px">
+          Sipd selects the next eligible member by queue position (FIFO).
+          You cannot choose who you send to — this keeps the queue fair for everyone.
+        </p>
+        <div id="assigned-recipient"></div>
+      </div>
+
+      <div class="card" id="cup-selector" style="display:none">
+        <h3>Pick a cup size for <span id="recip-name" style="color:var(--accent)">—</span></h3>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Each size can only be sent once per day</div>
+        <div class="cup-grid">
+          <div class="cup-btn" id="cup-small" onclick="App.selectCup('small')">
+            <span class="cup-icon">🥤</span>
+            <span class="cup-name">Small</span>
+            <span class="cup-price">R 55</span>
+          </div>
+          <div class="cup-btn" id="cup-medium" onclick="App.selectCup('medium')">
+            <span class="cup-icon">☕</span>
+            <span class="cup-name">Medium</span>
+            <span class="cup-price">R 90</span>
+          </div>
+          <div class="cup-btn" id="cup-large" onclick="App.selectCup('large')">
+            <span class="cup-icon">🧋</span>
+            <span class="cup-name">Large</span>
+            <span class="cup-price">R 165</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="send-btn" disabled onclick="App.sendCup()">
+          Select a cup size to continue
+        </button>
+        <div style="text-align:center">
+          <div class="payfast-note">Processed instantly via PayFast · Paid directly to recipient's bank</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── DASHBOARD TAB ── -->
+    <div id="tab-dashboard" class="tab-section" style="display:none">
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="s-label">Sent today</div>
+          <div class="s-value" id="ds-sent">0/3</div>
+          <div class="s-sub">Max 3 per day</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Received today</div>
+          <div class="s-value" id="ds-recv">0/0</div>
+          <div class="s-sub">Slots unlocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Total earned</div>
+          <div class="s-value" id="ds-total">R 0</div>
+          <div class="s-sub">All time</div>
+        </div>
+      </div>
+
+      <div class="sec-label" style="margin-bottom:8px">Today's receive slots</div>
+      <div class="card" id="slot-display"></div>
+
+      <div class="sec-label" style="margin-top:1.25rem;margin-bottom:8px">Transaction history</div>
+      <div class="card"><div id="hist-list"></div></div>
+
+      <div class="sec-label" style="margin-top:1.25rem;margin-bottom:8px">Queue position</div>
+      <div class="card" id="queue-pos-display"></div>
+
+    </div>
+
+    <!-- ── HOW IT WORKS TAB ── -->
+    <div id="tab-howit" class="tab-section" style="display:none">
+      <div class="card">
+        <div style="text-align:center;margin-bottom:1.5rem">
+          <div style="font-size:28px;font-weight:600;letter-spacing:-1px">sipd<span style="color:var(--accent)">.</span></div>
+          <div style="font-size:13px;color:var(--text2);margin-top:3px">How the community works</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent);flex-shrink:0">1</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;margin-bottom:3px">Pay R 5 once and join</div>
+              <div style="font-size:13px;color:var(--text2)">A once-off R 5 joining fee via PayFast verifies you as a real SA member, assigns your FIFO queue position, and activates automatic PayFast payouts to your linked bank account. You are never charged again.</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent);flex-shrink:0">2</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;margin-bottom:3px">System assigns your recipient</div>
+              <div style="font-size:13px;color:var(--text2)">You do not choose who you send to. Sipd automatically selects the next eligible person — the member who has been waiting the longest in the queue and still has open receive slots. This is FIFO (First In, First Out) and ensures complete fairness.</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent);flex-shrink:0">3</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;margin-bottom:3px">Gift at your own pace — 1, 2, or all 3 cups</div>
+              <div style="font-size:13px;color:var(--text2)">There is no pressure to send all 3 cups at once. You can send just 1 or 2 if you prefer. The options are Small (R 55), Medium (R 90), and Large (R 165) — one of each size per day, up to 3 total. It's entirely your choice how many you send each day.</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--green-bg);border:1px solid rgba(76,175,125,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--green);flex-shrink:0">4</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;margin-bottom:3px">Each cup puts you in line for 2 potential gifters</div>
+              <div style="font-size:13px;color:var(--text2)">Every cup you send places you in the queue to potentially receive 2 gifts back from other community members. The more you send, the more gifters you could attract — up to 6 per day if all 3 cups are sent. Receiving is not guaranteed but depends on community activity.</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--green-bg);border:1px solid rgba(76,175,125,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--green);flex-shrink:0">5</div>
+            <div>
+              <div style="font-size:14px;font-weight:500;margin-bottom:3px">PayFast pays you automatically</div>
+              <div style="font-size:13px;color:var(--text2)">When someone sends you a cup, the payment goes directly to your linked SA bank account via PayFast Split Pay. No manual confirmation needed, no delays, no holding of funds.</div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid var(--border);padding-top:1.25rem">
+            <div style="font-size:13px;font-weight:500;margin-bottom:10px">Cup sizes</div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+              <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:10px;text-align:center">
+                <div style="font-size:22px">🥤</div>
+                <div style="font-size:13px;font-weight:500;margin-top:4px">Small</div>
+                <div style="font-size:14px;color:var(--accent);font-family:var(--mono)">R 55</div>
+              </div>
+              <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:10px;text-align:center">
+                <div style="font-size:22px">☕</div>
+                <div style="font-size:13px;font-weight:500;margin-top:4px">Medium</div>
+                <div style="font-size:14px;color:var(--accent);font-family:var(--mono)">R 90</div>
+              </div>
+              <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:10px;text-align:center">
+                <div style="font-size:22px">🧋</div>
+                <div style="font-size:13px;font-weight:500;margin-top:4px">Large</div>
+                <div style="font-size:14px;color:var(--accent);font-family:var(--mono)">R 165</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid var(--border);padding-top:1.25rem">
+            <div style="font-size:13px;font-weight:500;margin-bottom:6px">Daily limits</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:10px">
+                <div style="font-size:22px;font-weight:600;color:var(--accent);font-family:var(--mono)">3</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:2px">Max sends per day</div>
+              </div>
+              <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:10px">
+                <div style="font-size:22px;font-weight:600;color:var(--green);font-family:var(--mono)">6</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:2px">Max receives per day</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid var(--border);padding-top:1.25rem">
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">Legal notice</div>
+            <div style="font-size:12px;color:var(--text3);line-height:1.6">
+              Sipd is a voluntary peer-to-peer gifting platform. Participation is entirely voluntary and no financial returns are guaranteed. This platform does not constitute financial advice or investment services. For financial advice, consult an FSCA-registered advisor.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/payfast.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Show welcome banner on first login after registration
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('welcome') === '1') {
+      const b = document.getElementById('welcome-banner');
+      b.style.display = 'block';
+      setTimeout(() => b.style.display = 'none', 6000);
+      window.history.replaceState({}, '', 'app.html');
+    }
+  });
+
+  function selectMethod(el) {
+    document.querySelectorAll('.pf-method').forEach(m => m.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>

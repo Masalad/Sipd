@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sipd — Join the community</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.pf-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem}
+.pf-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.75rem;width:100%;max-width:380px}
+.pf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.pf-logo{font-size:18px;font-weight:600;color:var(--text)}
+.pf-logo span{color:var(--accent)}
+.pf-close{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;line-height:1}
+.pf-merchant{text-align:center;font-size:22px;font-weight:600;letter-spacing:-0.5px;margin-bottom:6px}
+.pf-amount{text-align:center;font-size:36px;font-weight:600;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
+.pf-desc{text-align:center;font-size:13px;color:var(--text2);margin-bottom:4px}
+.pf-ref{text-align:center;font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:1rem}
+.pf-methods{display:flex;gap:6px;margin-bottom:4px}
+.pf-method{flex:1;padding:8px 4px;border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:12px;text-align:center;cursor:pointer;color:var(--text2);transition:all .15s}
+.pf-method.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.hero-section{text-align:center;padding:2rem 0 1.5rem}
+.hero-logo{font-size:48px;font-weight:600;letter-spacing:-2px;margin-bottom:8px}
+.hero-logo span{color:var(--accent)}
+.hero-tagline{font-size:16px;color:var(--text2);margin-bottom:2rem;line-height:1.5}
+.how-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:1.5rem 0}
+.how-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center}
+.how-num{font-size:11px;font-weight:600;color:var(--accent);font-family:var(--mono);margin-bottom:6px}
+.how-icon{font-size:24px;margin-bottom:6px}
+.how-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.how-desc{font-size:12px;color:var(--text2);line-height:1.4}
+.tabs-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;margin-bottom:1.5rem}
+.tab-toggle-btn{flex:1;padding:8px;border:none;border-radius:6px;background:transparent;color:var(--text2);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s}
+.tab-toggle-btn.active{background:var(--bg2);color:var(--text);border:1px solid var(--border2)}
+.earnings-box{background:var(--bg3);border:1px solid var(--accent-border);border-radius:var(--radius);padding:1rem;margin:1rem 0}
+.earnings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.earn-item{text-align:center;padding:8px;background:var(--bg2);border-radius:var(--radius-sm)}
+.earn-icon{font-size:18px}
+.earn-size{font-size:12px;font-weight:500;margin-top:3px}
+.earn-val{font-size:12px;color:var(--accent);font-family:var(--mono)}
+.earn-total{text-align:center;padding:10px;background:var(--green-bg);border-radius:var(--radius-sm)}
+.earn-total-amt{font-size:22px;font-weight:600;color:var(--green);font-family:var(--mono)}
+.earn-total-lbl{font-size:12px;color:var(--green);opacity:.7}
+@media(max-width:500px){.how-grid{grid-template-columns:1fr 1fr}.earnings-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<div id="payment-modal" style="display:none;position:fixed;inset:0;z-index:999"></div>
+
+<div style="display:flex;min-height:100vh">
+
+  <!-- LEFT: Hero / Info -->
+  <div style="flex:1;padding:2rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);min-width:0" class="hide-mobile">
+    <div class="hero-logo">sipd<span>.</span></div>
+    <div class="hero-tagline">South Africa's peer gifting community.<br>Sip together, grow together.</div>
+
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">STEP 01</div>
+        <div class="how-icon">🪪</div>
+        <div class="how-title">Join for R 5</div>
+        <div class="how-desc">Once-off fee. Activates your queue position and PayFast payouts.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">STEP 02</div>
+        <div class="how-icon">☕</div>
+        <div class="how-title">Gift at your own pace</div>
+        <div class="how-desc">Send 1, 2, or all 3 cups — your choice. Small (R55), Medium (R90), Large (R165). System assigns who receives.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">STEP 03</div>
+        <div class="how-icon">💸</div>
+        <div class="how-title">Get gifted in return</div>
+        <div class="how-desc">Each cup you send puts you in the queue for 2 potential gifters. Paid directly to your bank via PayFast.</div>
+      </div>
+    </div>
+
+    <div class="earnings-box">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500">IF ALL 3 CUPS ARE SENT — WHAT YOU COULD RECEIVE</div>
+      <div class="earnings-grid">
+        <div class="earn-item"><div class="earn-icon">🥤</div><div class="earn-size">Small ×2</div><div class="earn-val">R 110</div></div>
+        <div class="earn-item"><div class="earn-icon">☕</div><div class="earn-size">Medium ×2</div><div class="earn-val">R 180</div></div>
+        <div class="earn-item"><div class="earn-icon">🧋</div><div class="earn-size">Large ×2</div><div class="earn-val">R 330</div></div>
+      </div>
+      <div class="earn-total">
+        <div class="earn-total-amt">R 620</div>
+        <div class="earn-total-lbl">possible per day if all 3 cups gifted · not guaranteed</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--text3);margin-top:1rem;line-height:1.5">
+      Sipd is a voluntary peer-to-peer gifting platform. No returns are guaranteed.<br>
+      Powered by PayFast · South Africa
+    </div>
+  </div>
+
+  <!-- RIGHT: Auth Forms -->
+  <div style="width:100%;max-width:440px;padding:2rem;display:flex;flex-direction:column;justify-content:center">
+
+    <div style="margin-bottom:1.5rem;text-align:center">
+      <div style="font-size:28px;font-weight:600;letter-spacing:-1px">sipd<span style="color:var(--accent)">.</span></div>
+      <div style="font-size:13px;color:var(--text2);margin-top:3px">South Africa's peer gifting community</div>
+    </div>
+
+    <div class="tabs-toggle">
+      <button class="tab-toggle-btn active" id="tab-register-btn" onclick="switchAuthTab('register')">Create account</button>
+      <button class="tab-toggle-btn" id="tab-login-btn" onclick="switchAuthTab('login')">Sign in</button>
+    </div>
+
+    <!-- REGISTER STEP 1 -->
+    <div id="reg-step1">
+      <div id="reg-error" class="banner banner-warn" style="margin-bottom:12px"></div>
+      <div class="form-group">
+        <label>Full name</label>
+        <input type="text" id="reg-name" placeholder="e.g. Thabo Mokoena" />
+      </div>
+      <div class="form-group">
+        <label>SA ID number</label>
+        <input type="text" id="reg-id" placeholder="13-digit SA ID" maxlength="13" />
+      </div>
+      <div class="form-group">
+        <label>Mobile number</label>
+        <input type="text" id="reg-phone" placeholder="+27 82 000 0000" />
+      </div>
+      <div class="form-group">
+        <label>Bank name</label>
+        <select id="reg-bank-name">
+          <option value="">Select your bank</option>
+          <option>Absa</option>
+          <option>Capitec</option>
+          <option>FNB</option>
+          <option>Nedbank</option>
+          <option>Standard Bank</option>
+          <option>TymeBank</option>
+          <option>African Bank</option>
+          <option>Discovery Bank</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Bank account number</label>
+        <input type="text" id="reg-bank-acc" placeholder="Account number" />
+      </div>
+      <button class="btn btn-primary" onclick="goToFeeStep()">Continue to joining fee →</button>
+      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">
+        Your SA ID is used for verification only and is never shared publicly
+      </p>
+    </div>
+
+    <!-- REGISTER STEP 2: R5 Fee -->
+    <div id="reg-step2" style="display:none">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;cursor:pointer" onclick="backToStep1()">
+        <span style="color:var(--text2);font-size:14px">←</span>
+        <span style="font-size:13px;color:var(--text2)">Back</span>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-dot"></div>
+        <div class="step-dot active"></div>
+      </div>
+
+      <div class="fee-display">
+        <div class="fee-amount">R 5</div>
+        <div class="fee-label">Once-off joining fee · Never charged again</div>
+      </div>
+
+      <div class="checklist">
+        <div class="check-item"><span class="check-mark">✓</span><span>Verifies you as a real SA member</span></div>
+        <div class="check-item"><span class="check-mark">✓</span><span>Assigns your permanent FIFO queue position</span></div>
+        <div class="check-item"><span class="check-mark">✓</span><span>Activates PayFast payouts to your bank account</span></div>
+        <div class="check-item"><span class="check-mark">✓</span><span>One-time only — no monthly fees, no hidden charges</span></div>
+      </div>
+
+      <div class="confirm-box">
+        <div class="confirm-label">Registering as</div>
+        <div class="confirm-val" id="confirm-name">—</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px" id="confirm-bank">—</div>
+      </div>
+
+      <button class="btn btn-primary" onclick="payAndJoin()">Pay R 5 via PayFast & Join Sipd</button>
+      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">
+        Secure payment processed by PayFast.
+      </p>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-form" style="display:none">
+      <div id="login-error" class="banner banner-warn" style="margin-bottom:12px"></div>
+      <div class="form-group">
+        <label>SA ID number</label>
+        <input type="text" id="login-id" placeholder="Your 13-digit SA ID" maxlength="13"
+               onkeydown="if(event.key==='Enter') doLogin()" />
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()">Sign in to Sipd</button>
+      <div style="text-align:center;margin-top:12px">
+        <a href="admin.html" style="font-size:12px;color:var(--text3)">Admin access →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/payfast.js"></script>
+<script>
+
+  // Redirect if already logged in
+  (function() {
+    const s = Auth.getSession();
+    if (s) window.location.href = 'app.html';
+  })();
+
+  function switchAuthTab(tab) {
+    document.getElementById('tab-register-btn').classList.toggle('active', tab === 'register');
+    document.getElementById('tab-login-btn').classList.toggle('active', tab === 'login');
+    document.getElementById('reg-step1').style.display   = tab === 'register' ? 'block' : 'none';
+    document.getElementById('reg-step2').style.display   = 'none';
+    document.getElementById('login-form').style.display  = tab === 'login' ? 'block' : 'none';
+  }
+
+  function showError(elId, msg) {
+    const el = document.getElementById(elId);
+    el.textContent = msg; el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 5000);
+  }
+
+  function goToFeeStep() {
+    const name    = document.getElementById('reg-name').value.trim();
+    const id      = document.getElementById('reg-id').value.trim();
+    const phone   = document.getElementById('reg-phone').value.trim();
+    const bank    = document.getElementById('reg-bank-name').value;
+    const acc     = document.getElementById('reg-bank-acc').value.trim();
+
+    if (!name || !id || !phone || !bank || !acc) {
+      showError('reg-error', 'Please fill in all fields.'); return;
+    }
+    if (id.length !== 13 || isNaN(id)) {
+      showError('reg-error', 'Please enter a valid 13-digit SA ID number.'); return;
+    }
+
+    document.getElementById('confirm-name').textContent = name;
+    document.getElementById('confirm-bank').textContent = bank + ' · ' + acc;
+    document.getElementById('reg-step1').style.display = 'none';
+    document.getElementById('reg-step2').style.display = 'block';
+  }
+
+  function backToStep1() {
+    document.getElementById('reg-step2').style.display = 'none';
+    document.getElementById('reg-step1').style.display = 'block';
+  }
+
+  function payAndJoin() {
+    PayFast.initiatePayment({
+      type: 'joining',
+      amount: PayFast.PRICES.joining,
+      buyerId: document.getElementById('reg-id').value.trim(),
+      recipientName: 'Sipd Technologies PTY Ltd',
+      onSuccess: () => completeRegistration(),
+    });
+  }
+
+  function completeRegistration() {
+    const result = Auth.register({
+      name:        document.getElementById('reg-name').value.trim(),
+      idNumber:    document.getElementById('reg-id').value.trim(),
+      phone:       document.getElementById('reg-phone').value.trim(),
+      bankName:    document.getElementById('reg-bank-name').value,
+      bankAccount: document.getElementById('reg-bank-acc').value.trim(),
+    });
+
+    if (!result.ok) { showError('reg-error', result.error); backToStep1(); return; }
+    window.location.href = 'app.html?welcome=1';
+  }
+
+  function doLogin() {
+    const id = document.getElementById('login-id').value.trim();
+    if (!id) { showError('login-error', 'Please enter your SA ID number.'); return; }
+    const result = Auth.login(id);
+    if (!result.ok) { showError('login-error', result.error); return; }
+    window.location.href = 'app.html';
+  }
+
+  // Demo login shortcut
+  function demoLogin() {
+    const result = Auth.login('DEMO001');
+    if (result.ok) { window.location.href = 'app.html'; }
+    else {
+      // seed a demo user and log in
+      Auth.register({ name: 'Demo User', idNumber: 'DEMO001', phone: '0821234000', bankName: 'FNB', bankAccount: '9999999999' });
+      window.location.href = 'app.html';
+    }
+  }
+</script>
+</body>
+</html>
