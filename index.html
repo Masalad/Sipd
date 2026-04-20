@@ -6,12 +6,13 @@
 <title>Sipd — Join the community</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-.pf-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem}
-.pf-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.75rem;width:100%;max-width:380px}
+/* ── PayFast Modal ── */
+.pf-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem}
+.pf-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.75rem;width:100%;max-width:360px}
 .pf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
 .pf-logo{font-size:18px;font-weight:600;color:var(--text)}
 .pf-logo span{color:var(--accent)}
-.pf-close{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;line-height:1}
+.pf-close{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer}
 .pf-merchant{text-align:center;font-size:22px;font-weight:600;letter-spacing:-0.5px;margin-bottom:6px}
 .pf-amount{text-align:center;font-size:36px;font-weight:600;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
 .pf-desc{text-align:center;font-size:13px;color:var(--text2);margin-bottom:4px}
@@ -19,19 +20,42 @@
 .pf-methods{display:flex;gap:6px;margin-bottom:4px}
 .pf-method{flex:1;padding:8px 4px;border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:12px;text-align:center;cursor:pointer;color:var(--text2);transition:all .15s}
 .pf-method.active{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
-.hero-section{text-align:center;padding:2rem 0 1.5rem}
-.hero-logo{font-size:48px;font-weight:600;letter-spacing:-2px;margin-bottom:8px}
-.hero-logo span{color:var(--accent)}
-.hero-tagline{font-size:16px;color:var(--text2);margin-bottom:2rem;line-height:1.5}
+
+/* ── Page layout ── */
+.page-outer{min-height:100vh;display:flex;flex-direction:column}
+
+/* Desktop: two columns side by side */
+.page-inner{display:flex;flex:1}
+.info-panel{flex:1;padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);min-width:0}
+.auth-panel{width:100%;max-width:460px;padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center}
+
+/* Mobile: stack vertically, hide info panel details */
+@media(max-width:700px){
+  .page-inner{flex-direction:column}
+  .info-panel{border-right:none;border-bottom:1px solid var(--border);padding:2rem 1.25rem 1.5rem;justify-content:flex-start}
+  .auth-panel{max-width:100%;padding:1.5rem 1.25rem}
+  .info-panel .hero-logo{font-size:36px}
+  .info-panel .hero-tagline{font-size:14px;margin-bottom:1rem}
+  .how-grid{grid-template-columns:1fr!important;gap:8px!important;margin:1rem 0!important}
+  .earnings-box{margin:.75rem 0!important}
+  .desktop-only{display:none!important}
+}
+
+/* How-it-works cards */
 .how-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:1.5rem 0}
-.how-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center}
-.how-num{font-size:11px;font-weight:600;color:var(--accent);font-family:var(--mono);margin-bottom:6px}
-.how-icon{font-size:24px;margin-bottom:6px}
-.how-title{font-size:13px;font-weight:500;margin-bottom:4px}
-.how-desc{font-size:12px;color:var(--text2);line-height:1.4}
-.tabs-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;margin-bottom:1.5rem}
-.tab-toggle-btn{flex:1;padding:8px;border:none;border-radius:6px;background:transparent;color:var(--text2);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s}
-.tab-toggle-btn.active{background:var(--bg2);color:var(--text);border:1px solid var(--border2)}
+.how-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+.how-card-inner{display:flex;align-items:flex-start;gap:10px}
+.how-num{font-size:11px;font-weight:600;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
+.how-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.how-title{font-size:13px;font-weight:500;margin-bottom:3px}
+.how-desc{font-size:12px;color:var(--text2);line-height:1.45}
+
+/* On mobile the cards go horizontal (icon + text side by side) */
+@media(max-width:700px){
+  .how-card{padding:.75rem}
+}
+
+/* Earnings box */
 .earnings-box{background:var(--bg3);border:1px solid var(--accent-border);border-radius:var(--radius);padding:1rem;margin:1rem 0}
 .earnings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .earn-item{text-align:center;padding:8px;background:var(--bg2);border-radius:var(--radius-sm)}
@@ -41,43 +65,66 @@
 .earn-total{text-align:center;padding:10px;background:var(--green-bg);border-radius:var(--radius-sm)}
 .earn-total-amt{font-size:22px;font-weight:600;color:var(--green);font-family:var(--mono)}
 .earn-total-lbl{font-size:12px;color:var(--green);opacity:.7}
-@media(max-width:500px){.how-grid{grid-template-columns:1fr 1fr}.earnings-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* Auth tabs toggle */
+.tabs-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;margin-bottom:1.5rem}
+.tab-toggle-btn{flex:1;padding:9px;border:none;border-radius:6px;background:transparent;color:var(--text2);font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s}
+.tab-toggle-btn.active{background:var(--bg2);color:var(--text);border:1px solid var(--border2)}
+
+/* Hero */
+.hero-logo{font-size:44px;font-weight:600;letter-spacing:-2px;margin-bottom:6px}
+.hero-logo span{color:var(--accent)}
+.hero-tagline{font-size:15px;color:var(--text2);margin-bottom:1.5rem;line-height:1.5}
 </style>
 </head>
 <body>
 
 <div id="payment-modal" style="display:none;position:fixed;inset:0;z-index:999"></div>
 
-<div style="display:flex;min-height:100vh">
+<div class="page-outer">
+<div class="page-inner">
 
-  <!-- LEFT: Hero / Info -->
-  <div style="flex:1;padding:2rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);min-width:0" class="hide-mobile">
+  <!-- ── LEFT INFO PANEL ── -->
+  <div class="info-panel">
+
     <div class="hero-logo">sipd<span>.</span></div>
     <div class="hero-tagline">South Africa's peer gifting community.<br>Sip together, grow together.</div>
 
     <div class="how-grid">
       <div class="how-card">
         <div class="how-num">STEP 01</div>
-        <div class="how-icon">🪪</div>
-        <div class="how-title">Join for R 5</div>
-        <div class="how-desc">Once-off fee. Activates your queue position and PayFast payouts.</div>
+        <div class="how-card-inner">
+          <div class="how-icon">🪪</div>
+          <div>
+            <div class="how-title">Join for R 5</div>
+            <div class="how-desc">Once-off fee. Activates your queue position and PayFast payouts. Never charged again.</div>
+          </div>
+        </div>
       </div>
       <div class="how-card">
         <div class="how-num">STEP 02</div>
-        <div class="how-icon">☕</div>
-        <div class="how-title">Gift at your own pace</div>
-        <div class="how-desc">Send 1, 2, or all 3 cups — your choice. Small (R55), Medium (R90), Large (R165). System assigns who receives.</div>
+        <div class="how-card-inner">
+          <div class="how-icon">☕</div>
+          <div>
+            <div class="how-title">Gift at your own pace</div>
+            <div class="how-desc">Send 1, 2, or all 3 cups — your choice. Small (R55), Medium (R90), Large (R165).</div>
+          </div>
+        </div>
       </div>
       <div class="how-card">
         <div class="how-num">STEP 03</div>
-        <div class="how-icon">💸</div>
-        <div class="how-title">Get gifted in return</div>
-        <div class="how-desc">Each cup you send puts you in the queue for 2 potential gifters. Paid directly to your bank via PayFast.</div>
+        <div class="how-card-inner">
+          <div class="how-icon">💸</div>
+          <div>
+            <div class="how-title">Get gifted in return</div>
+            <div class="how-desc">Each cup puts you in line for 2 potential gifters. Paid directly to your bank via PayFast.</div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="earnings-box">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500">IF ALL 3 CUPS ARE SENT — WHAT YOU COULD RECEIVE</div>
+      <div style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:.04em">If all 3 cups are sent — what you could receive</div>
       <div class="earnings-grid">
         <div class="earn-item"><div class="earn-icon">🥤</div><div class="earn-size">Small ×2</div><div class="earn-val">R 110</div></div>
         <div class="earn-item"><div class="earn-icon">☕</div><div class="earn-size">Medium ×2</div><div class="earn-val">R 180</div></div>
@@ -85,21 +132,22 @@
       </div>
       <div class="earn-total">
         <div class="earn-total-amt">R 620</div>
-        <div class="earn-total-lbl">possible per day if all 3 cups gifted · not guaranteed</div>
+        <div class="earn-total-lbl">possible per day · not guaranteed</div>
       </div>
     </div>
 
-    <div style="font-size:11px;color:var(--text3);margin-top:1rem;line-height:1.5">
+    <div style="font-size:11px;color:var(--text3);margin-top:1rem;line-height:1.6">
       Sipd is a voluntary peer-to-peer gifting platform. No returns are guaranteed.<br>
       Powered by PayFast · South Africa
     </div>
+
   </div>
 
-  <!-- RIGHT: Auth Forms -->
-  <div style="width:100%;max-width:440px;padding:2rem;display:flex;flex-direction:column;justify-content:center">
+  <!-- ── RIGHT AUTH PANEL ── -->
+  <div class="auth-panel">
 
     <div style="margin-bottom:1.5rem;text-align:center">
-      <div style="font-size:28px;font-weight:600;letter-spacing:-1px">sipd<span style="color:var(--accent)">.</span></div>
+      <div style="font-size:26px;font-weight:600;letter-spacing:-1px">sipd<span style="color:var(--accent)">.</span></div>
       <div style="font-size:13px;color:var(--text2);margin-top:3px">South Africa's peer gifting community</div>
     </div>
 
@@ -113,15 +161,15 @@
       <div id="reg-error" class="banner banner-warn" style="margin-bottom:12px"></div>
       <div class="form-group">
         <label>Full name</label>
-        <input type="text" id="reg-name" placeholder="e.g. Thabo Mokoena" />
+        <input type="text" id="reg-name" placeholder="e.g. Thabo Mokoena" autocomplete="name" />
       </div>
       <div class="form-group">
         <label>SA ID number</label>
-        <input type="text" id="reg-id" placeholder="13-digit SA ID" maxlength="13" />
+        <input type="text" id="reg-id" placeholder="13-digit SA ID" maxlength="13" inputmode="numeric" />
       </div>
       <div class="form-group">
         <label>Mobile number</label>
-        <input type="text" id="reg-phone" placeholder="+27 82 000 0000" />
+        <input type="tel" id="reg-phone" placeholder="+27 82 000 0000" autocomplete="tel" />
       </div>
       <div class="form-group">
         <label>Bank name</label>
@@ -139,7 +187,7 @@
       </div>
       <div class="form-group">
         <label>Bank account number</label>
-        <input type="text" id="reg-bank-acc" placeholder="Account number" />
+        <input type="text" id="reg-bank-acc" placeholder="Account number" inputmode="numeric" />
       </div>
       <button class="btn btn-primary" onclick="goToFeeStep()">Continue to joining fee →</button>
       <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">
@@ -153,30 +201,25 @@
         <span style="color:var(--text2);font-size:14px">←</span>
         <span style="font-size:13px;color:var(--text2)">Back</span>
       </div>
-
       <div class="step-indicator">
         <div class="step-dot"></div>
         <div class="step-dot active"></div>
       </div>
-
       <div class="fee-display">
         <div class="fee-amount">R 5</div>
         <div class="fee-label">Once-off joining fee · Never charged again</div>
       </div>
-
       <div class="checklist">
         <div class="check-item"><span class="check-mark">✓</span><span>Verifies you as a real SA member</span></div>
         <div class="check-item"><span class="check-mark">✓</span><span>Assigns your permanent FIFO queue position</span></div>
         <div class="check-item"><span class="check-mark">✓</span><span>Activates PayFast payouts to your bank account</span></div>
         <div class="check-item"><span class="check-mark">✓</span><span>One-time only — no monthly fees, no hidden charges</span></div>
       </div>
-
       <div class="confirm-box">
         <div class="confirm-label">Registering as</div>
         <div class="confirm-val" id="confirm-name">—</div>
         <div style="font-size:12px;color:var(--text3);margin-top:2px" id="confirm-bank">—</div>
       </div>
-
       <button class="btn btn-primary" onclick="payAndJoin()">Pay R 5 via PayFast & Join Sipd</button>
       <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">
         Secure payment processed by PayFast.
@@ -189,22 +232,21 @@
       <div class="form-group">
         <label>SA ID number</label>
         <input type="text" id="login-id" placeholder="Your 13-digit SA ID" maxlength="13"
-               onkeydown="if(event.key==='Enter') doLogin()" />
+               inputmode="numeric" onkeydown="if(event.key==='Enter') doLogin()" />
       </div>
       <button class="btn btn-primary" onclick="doLogin()">Sign in to Sipd</button>
-      <div style="text-align:center;margin-top:12px">
+      <div style="text-align:center;margin-top:14px">
         <a href="admin.html" style="font-size:12px;color:var(--text3)">Admin access →</a>
       </div>
     </div>
 
   </div>
 </div>
+</div>
 
 <script src="js/auth.js"></script>
 <script src="js/payfast.js"></script>
 <script>
-
-  // Redirect if already logged in
   (function() {
     const s = Auth.getSession();
     if (s) window.location.href = 'app.html';
@@ -213,9 +255,9 @@
   function switchAuthTab(tab) {
     document.getElementById('tab-register-btn').classList.toggle('active', tab === 'register');
     document.getElementById('tab-login-btn').classList.toggle('active', tab === 'login');
-    document.getElementById('reg-step1').style.display   = tab === 'register' ? 'block' : 'none';
-    document.getElementById('reg-step2').style.display   = 'none';
-    document.getElementById('login-form').style.display  = tab === 'login' ? 'block' : 'none';
+    document.getElementById('reg-step1').style.display  = tab === 'register' ? 'block' : 'none';
+    document.getElementById('reg-step2').style.display  = 'none';
+    document.getElementById('login-form').style.display = tab === 'login'    ? 'block' : 'none';
   }
 
   function showError(elId, msg) {
@@ -225,19 +267,13 @@
   }
 
   function goToFeeStep() {
-    const name    = document.getElementById('reg-name').value.trim();
-    const id      = document.getElementById('reg-id').value.trim();
-    const phone   = document.getElementById('reg-phone').value.trim();
-    const bank    = document.getElementById('reg-bank-name').value;
-    const acc     = document.getElementById('reg-bank-acc').value.trim();
-
-    if (!name || !id || !phone || !bank || !acc) {
-      showError('reg-error', 'Please fill in all fields.'); return;
-    }
-    if (id.length !== 13 || isNaN(id)) {
-      showError('reg-error', 'Please enter a valid 13-digit SA ID number.'); return;
-    }
-
+    const name = document.getElementById('reg-name').value.trim();
+    const id   = document.getElementById('reg-id').value.trim();
+    const phone= document.getElementById('reg-phone').value.trim();
+    const bank = document.getElementById('reg-bank-name').value;
+    const acc  = document.getElementById('reg-bank-acc').value.trim();
+    if (!name || !id || !phone || !bank || !acc) { showError('reg-error', 'Please fill in all fields.'); return; }
+    if (id.length !== 13 || isNaN(id))           { showError('reg-error', 'Please enter a valid 13-digit SA ID number.'); return; }
     document.getElementById('confirm-name').textContent = name;
     document.getElementById('confirm-bank').textContent = bank + ' · ' + acc;
     document.getElementById('reg-step1').style.display = 'none';
@@ -254,7 +290,7 @@
       type: 'joining',
       amount: PayFast.PRICES.joining,
       buyerId: document.getElementById('reg-id').value.trim(),
-      recipientName: 'Sipd Technologies PTY Ltd',
+      recipientName: 'Sipd',
       onSuccess: () => completeRegistration(),
     });
   }
@@ -267,7 +303,6 @@
       bankName:    document.getElementById('reg-bank-name').value,
       bankAccount: document.getElementById('reg-bank-acc').value.trim(),
     });
-
     if (!result.ok) { showError('reg-error', result.error); backToStep1(); return; }
     window.location.href = 'app.html?welcome=1';
   }
@@ -280,15 +315,9 @@
     window.location.href = 'app.html';
   }
 
-  // Demo login shortcut
-  function demoLogin() {
-    const result = Auth.login('DEMO001');
-    if (result.ok) { window.location.href = 'app.html'; }
-    else {
-      // seed a demo user and log in
-      Auth.register({ name: 'Demo User', idNumber: 'DEMO001', phone: '0821234000', bankName: 'FNB', bankAccount: '9999999999' });
-      window.location.href = 'app.html';
-    }
+  function selectMethod(el) {
+    document.querySelectorAll('.pf-method').forEach(m => m.classList.remove('active'));
+    el.classList.add('active');
   }
 </script>
 </body>
